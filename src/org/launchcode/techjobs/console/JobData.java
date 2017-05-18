@@ -4,12 +4,14 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by LaunchCode
@@ -74,13 +76,35 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
+            value = value.toLowerCase();
 
             if (aValue.contains(value)) {
                 jobs.add(row);
             }
         }
 
+        return jobs;
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        String findValue;
+
+        for (HashMap<String, String> job : allJobs) {
+            for (Map.Entry<String, String> jobDetail : job.entrySet()) {
+                value = value.toLowerCase();
+                findValue = jobDetail.getValue().toLowerCase();
+                if (findValue.contains(value)) {
+                    jobs.add(job);
+                    break;
+                }
+
+            }
+        }
         return jobs;
     }
 
@@ -124,5 +148,6 @@ public class JobData {
             e.printStackTrace();
         }
     }
+
 
 }
